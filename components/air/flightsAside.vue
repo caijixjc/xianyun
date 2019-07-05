@@ -22,19 +22,21 @@
 
         <div class="history">
             <h5>历史查询</h5>
-            <nuxt-link :to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`"
-            v-for="(item, index) in reverseSum"
-                 :key="index">
+            <nuxt-link 
+            :to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`"  
+            v-for="(item, index) in airsLog"
+            :key="index">
                 <el-row type="flex" 
                 justify="space-between" 
                 align="middle"
-                class="history-item"
-                >
-                    <div class="air-info" >
-                        <div class="to-from">{{item.departCity}} - {{item.destCity}}</div>
+                class="history-item">
+                    <div class="air-info">
+                        <div class="to-from">
+                            {{item.departCity}} - {{item.destCity}}
+                        </div>
                         <p>{{item.departDate}}</p>
                     </div>
-                    <span @click="handleChoice">选择</span>
+                    <span>选择</span>
                 </el-row>
             </nuxt-link>
         </div>
@@ -43,34 +45,16 @@
 
 <script>
 export default {
-
-            data() {
-                return {
-                    airsLog:[]
-                }
-            },
-            mounted() {
-                this.airsLog = JSON.parse(localStorage.getItem("airs")||"[]")
-                console.log(this.airsLog);
-                
-
-            },
-            methods: {
-                handleChoice(){
-                    console.log(this.airsLog);
-                    if(this.airsLog){
-                        this.$router.push({
-                             path:"/air",
-                             query:this.airsLog
-                        })
-                    }
-                }
-            },
-            computed: {
-                 reverseSum() {
-            return this.airsLog.reverse();
+    data(){
+        return {
+            airsLog: []
         }
-            },
+    },
+
+    mounted(){
+        // 获取历史记录
+        this.airsLog = JSON.parse(localStorage.getItem("airs") || `[]`);
+    }
 }
 </script>
 

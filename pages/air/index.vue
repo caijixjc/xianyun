@@ -7,7 +7,7 @@
     <!-- 搜索广告栏 -->
     <el-row type="flex" justify="space-between">
         <!-- 搜索表单 -->
-        <searchForm></searchForm>
+        <SearchForm/>
 
         <!-- banner广告 -->
         <div class="sale-banner">
@@ -37,40 +37,44 @@
     </h2>
 
     <!-- 特价机票 -->
-        <div class="air-sale">
-        <el-row type="flex" class="air-sale-pic" justify="space-between">
-            <el-col :span="6" v-for="(item, index) in sales" :key="index">
-                <nuxt-link :to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`">
-                    <img :src="item.cover"/>
-                    <el-row class="layer-bar" type="flex" justify="space-between">
-                        <span>{{item.departCity}}-{{item.destCity}}</span>
-                        <span>￥699</span>
-                    </el-row>
-                </nuxt-link>
-            </el-col>
+    <div class="air-sale">
+        <el-row type="flex" justify="space-between" class="air-sale-pic">
+          <el-col :span="6" v-for="(item,index) in sales" :key="index">
+            <nuxt-link to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`">
+              <img :src="item.cover" />
+              <el-row type="flex" justify="space-between" class="layer-bar">
+                <span>{{item.departCity}}-{{item.destCity}}</span>
+                <span>{{item.price}}</span>
+              </el-row>
+            </nuxt-link>
+          </el-col>
         </el-row>
     </div>
   </section>
 </template>
 
 <script>
-import searchForm from '@/components/air/searchForm' 
+import SearchForm from "@/components/air/searchForm";
+
 export default {
-    data() {
-      return {
+  components: {
+    SearchForm
+  },
+  data(){
+    return {
         sales: [] // 去除模拟数据
-      }
-    },
-    components:{
-        searchForm
-    },
-    mounted() {
-       this.$axios({
-            url: `/airs/sale`
-        }).then(res => {
-            this.sales = res.data.data;
-        });
-    },
+    }
+  },
+  mounted(){
+    this.$axios({
+      url:'/airs/sale',
+      method: 'GET',
+    }).then(res=>{
+      // console.log(res.data);
+      const {data} = res.data;
+      this.sales = data;
+    })
+  }
 }
 </script>
 

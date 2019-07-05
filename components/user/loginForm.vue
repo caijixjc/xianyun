@@ -1,78 +1,101 @@
 <template>
-  <el-form class="form" :model="form" ref="form" :rules="rules">
-    <el-form-item class="form-item" prop="username">
-      <el-input placeholder="手机/用户名" v-model="form.username" ></el-input>
-    </el-form-item>
-
-    <el-form-item class="form-text" prop="password">
-      <el-input placeholder="密码" type="password" v-model="form.password" ></el-input>
-    </el-form-item>
-    <el-button type="primary" class="submit" @click="handleSubmit">登录</el-button>
-  </el-form>
+    <el-form
+    :model="form"
+    ref="form"
+    :rules="rules"
+    class="form">
+        <el-form-item class="form_item" prop="username">
+            <el-input 
+            placeholder="用户名/手机"
+            v-model="form.username"></el-input>
+        </el-form-item>
+        <el-form-item class="form_item" prop="password">
+            <el-input 
+            type="password" 
+            placeholder="密码"
+            v-model="form.password"></el-input>
+        </el-form-item>
+        <!-- <p class="form_text">
+            <nuxt-link to="#">忘记密码</nuxt-link>
+        </p> -->
+        <el-button
+        class="submit"
+        type="primary"
+        @click="handleSubmit">登录</el-button>
+    </el-form>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      form: {
-        username: "",
-        password: ""
-      },
-      rules: {
-        username: [
-          { required: true, message: "请输入手机号码", trigger: "blur" }
-        ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
-      }
-    };
-  },
-  methods: {
-    handleSubmit() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          // this.$axios({
-          //   url: "/accounts/login",
-          //   method: "POST",
-          //   data: this.form
-          // }).then(res => {
-          //     const {data} = res.data;
-          //     commit("userInfo",data)
-          //     return data
-
-          // });
-          //1把当前所需要提交的数据发送到仓库去让仓库去提交 "/user/login"代表着store下的user文件里的actions里面的login函数,this.form是需要提交的数据.
-          this.$store.dispatch("user/logo",this.form).then(v =>{
-              this.$message.success("登录成功,正在跳转....")
-              setTimeout(()=>{
-                this.$router.push("/")
-              },3000)
-          })
+    data(){
+        return{
+            // 表单数据
+            form: {
+                username: '13800138000',
+                password: '123456'
+            },
+            // 表单规则
+            rules: {
+                username: [{required: true, message: '请输入用户名', trigger: 'blur' }],
+                password: [{required: true, message: '请输入密码', trigger: 'blur' }]
+            }
         }
-      });
+    },
+    methods: {
+        handleSubmit(){
+            // 验证表单
+            this.$refs.form.validate((valid)=>{
+                // 为true表示没有错误
+                if(valid){
+                    // this.$axios({
+                    //     url: '/accounts/login',
+                    //     method: 'POST',
+                    //     data: this.form
+                    // }).then(res=>{
+                    //     // console.log(res.data);
+                    //     // 调用store下的mutations的方法
+                    //     this.$store.commit('user/setUserInfo',res.data)
+                    //     this.$message.success("登录成功，正在跳转..."   );
+
+                    //     setTimeout(()=>{
+                    //         this.$router.push('/')
+                    //     },1000)
+                    // })
+
+
+                    // 调用actions
+                    this.$store.dispatch("user/login", this.form).then(v => {
+                        this.$message.success("登录成功，正在跳转...");
+
+                        setTimeout(() => {
+                            this.$router.push("/");
+                        }, 1000);
+                    });
+                }
+            })
+        }
     }
-  }
-};
+}
 </script>
 
-<style scoped lang="less">
-.form {
-  padding: 25px;
-}
+<style scoped lang='less'>
+    .form{
+        padding:25px;
+    }
 
-.form-item {
-  margin-bottom: 20px;
-}
+    .form-item{
+        margin-bottom:20px;
+    }
 
-.form-text {
-  font-size: 12px;
-  color: #409eff;
-  text-align: right;
-  line-height: 1;
-}
+    .form-text{
+        font-size:12px;
+        color:#409EFF;
+        text-align: right;
+        line-height: 1;
+    }
 
-.submit {
-  width: 100%;
-  margin-top: 10px;
-}
+    .submit{
+        width:100%;
+        margin-top:10px;
+    }
 </style>

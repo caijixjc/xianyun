@@ -1,6 +1,6 @@
 <template>
     <div>
-        旅游攻略
+        旅游攻略模块首页文件
     </div>
 </template>
 

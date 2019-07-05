@@ -2,7 +2,7 @@
     <div class="container">
         <div class="main">
             <div class="pay-title">
-                支付总金额 <span class="pay-price">￥ 1000</span>
+                支付总金额 <span class="pay-price">￥ {{order.price}}</span>
             </div>
             <div class="pay-main">
                 <h4>微信支付</h4>
@@ -13,6 +13,7 @@
                     <div class="qrcode">
                         <!-- 二维码 -->
                         <canvas id="qrcode-stage"></canvas>
+
                         <p>请使用微信扫一扫</p>
                         <p>扫描二维码支付</p>
                     </div>
@@ -26,9 +27,39 @@
 </template>
 
 <script>
+// 导入生成二维码的包
 import QRCode from "qrcode";
+
 export default {
-    
+    data(){
+        return {
+            order: {}
+        }
+    },
+    mounted(){
+        // 需要点时间把本地的值赋给store
+        setTimeout(() => {
+            // 获取订单详情
+            this.$axios({
+                url: `/airorders/${this.$route.query.id}`,
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+                }
+            }).then(res => {
+                this.order = res.data;
+
+                // 获取了dom元素
+                const stage = document.querySelector("#qrcode-stage");
+
+                // 生成二维码，
+                // 第一个参数是canva的dom对象，第二个参数是二维码的链接，第三个是宽高的配置
+                QRCode.toCanvas(stage, this.order.payInfo.code_url, {
+                    width: 200
+                }); 
+            })
+        }, 100)  
+    }
 }
 </script>
 
