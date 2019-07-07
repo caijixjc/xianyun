@@ -94,7 +94,7 @@ export default {
                 return;
             }
             this.$axios({
-                // url: '/city?name='+ value,
+                // url: '/citys?name='+ value,
                 url: "http://157.122.54.189:9095/airs/city?name=" + value,
                 method: 'GET'
             }).then(res =>{
