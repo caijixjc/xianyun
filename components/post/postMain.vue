@@ -12,8 +12,9 @@
                                      ><span>{{item.type}}</span></div>
                                     <div class="menus-content"  >
                                        
-                                        <span v-if='current==index' v-for='(item,index) in data' 
-                                    :key='index'>
+                                        <span  v-for='(item,index) in data' 
+                                    :key='index'
+                                    v-if='current==index'>
                                             <div v-for='(item,index) in item.children' 
                                     :key='index'><i>{{index+1}}</i>{{item.city}}{{item.desc}}</div>
                                         </span>
@@ -180,9 +181,9 @@ export default {
           this.current=-1
       },
       handlepagechange(id){
+        console.log(id)
           this.$router.push({
-              path:'/post/detial',
-              query:id
+              path:'/post/detail?id='+id,
           })
       }
     
