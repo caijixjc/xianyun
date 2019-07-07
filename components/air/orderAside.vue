@@ -41,7 +41,7 @@
         </el-row>
         <el-row type="flex" justify="space-between" align="middle" class="info-bar">
             <span>应付总额：</span>
-            <span class="price">￥{{allPrice}} </span>
+            <span class="price">￥ {{allPrice}}</span>
         </el-row>           
     </div>
 </template>
@@ -53,7 +53,11 @@ export default {
             type: Object,
             default: {}
         },
-        allPrice:0
+
+        allPrice: {
+            type: Number,
+            default: 0
+        }
     },
 
     computed: {
@@ -77,7 +81,7 @@ export default {
 
             // 得到相差时间
             return `${ Math.floor(dis / 60)}时${dis % 60}分`
-        }
+        },
     },
 }
 </script>
