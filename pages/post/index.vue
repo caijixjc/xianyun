@@ -1,12 +1,19 @@
 <template>
-    <div>
-        旅游攻略模块首页文件
-    </div>
+  <div>
+    <Postmain/>
+  </div>
 </template>
 
 <script>
-export default {
+import Postmain from '@/components/post/postMain.vue';
 
+export default {
+     components:{
+       Postmain
+     },
+     mounted(){
+       
+     }
 }
 </script>
 
