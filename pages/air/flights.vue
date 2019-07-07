@@ -106,7 +106,7 @@ export default {
                 this.pageIndex = 1;
                 
                 // 获取第一到第5条
-                this.dataList = res.data.flights.slice(0, 5);
+                this.dataList = res.data.flights.slice(0, pagesize);
             })
         },
         // 设置dataList数据
@@ -121,6 +121,7 @@ export default {
             const end = start + this.pageSize; 
             this.dataList = this.flightsData.flights.slice(start, end);
         },
+
         // 切换条数时触发
         handleSizeChange(value){
             this.pageSize = value;
