@@ -10,7 +10,8 @@
 
 export const state = ()=>{
     return{
-        userInfo: process.browser? JSON.parse(localStorage.getItem('userInfo')) || {token:'',user:{}}: {error:"localstorge无法使用"}
+        userInfo: process.browser? JSON.parse(localStorage.getItem('userInfo')) || {token:'',user:{}}: {error:"localstorge无法使用"},
+        draft:[]
         // userInfo : {
         //     token:'',
         //     user: {}
@@ -21,23 +22,32 @@ export const state = ()=>{
 export const mutations = {
     // 设置用户的数据
     setUserInfo(state,data){
-        state.userInfo = data;
-        // console.log(data)
+
         if(process.browser){
             localStorage.setItem('userInfo',JSON.stringify(data))
         }
+        state.userInfo = data;
     },
+
     clearUserInfo(state){
         localStorage.removeItem('userInfo')
         state.userInfo = {
             token:'',
             user: {}
         }
-    }
+    },
+    //设置草稿箱
+    // setDraft(state,data){
+    //     state.draft = data;
+    //     // state.draft.push(data)
+    //     if(process.browser){
+    //         localStorage.setItem('draft',JSON.parse(JSON.stringify(data)))
+    //     }
+    // }
 }
 
 export const actions = {
-    login({commit},data){
+    login({commit},data){       
         return this.$axios({
             url: "/accounts/login",
             method: "POST",
@@ -49,5 +59,16 @@ export const actions = {
             // 调用login方法传入的成功的回调函数
             Promise.resolve();
         });
+    },
+    
+    draft({commit},data){
+        return this.$axios({
+            url:'/post/create',
+            method:'POST',
+            data
+        }).then(res=>{
+            commit("setDraft",res.data);
+            Promise.resolve();
+        })
     }
 }
