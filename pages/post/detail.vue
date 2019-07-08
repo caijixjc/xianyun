@@ -124,8 +124,8 @@ export default {
       like:1,  //当前点赞书
       pageIndex: 1, // 当前页数
       pageSize: 5,  // 显示条数
-      length:0,
-      dataList:[],
+      length:0,  //总条数
+      dataList:[],  //截取后的条数
 
       contents: [],
 
