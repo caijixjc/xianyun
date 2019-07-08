@@ -11,7 +11,7 @@
 export const state = ()=>{
     return{
         userInfo: process.browser? JSON.parse(localStorage.getItem('userInfo')) || {token:'',user:{}}: {error:"localstorge无法使用"},
-        draft:[]
+        
         // userInfo : {
         //     token:'',
         //     user: {}
