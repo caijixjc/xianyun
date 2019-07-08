@@ -47,8 +47,13 @@
                             </div>
                             <div class="post-title el-row is-justify-space-between is-align-middle el-row--flex"
                                 >
+<<<<<<< HEAD
+                                <h4 >推荐攻略</h4> <button type="button" class="el-button el-button--primary" @click="handleCreate"
+                                    >
+=======
                                 <h3 >推荐攻略</h3> <button type="button" class="el-button el-button--primary"
                                     @click='handlewrite'>
+>>>>>>> 6f088785810c87a5e56d58480ed26ddbb214b846
                                     <!----><i class="el-icon-edit"></i><span>
                                         写游记
                                     </span></button>
@@ -195,6 +200,11 @@ export default {
               path:'/post/detail?id='+id,
           })
       },
+<<<<<<< HEAD
+      handleCreate(){
+        // console.log(this.$router);
+        this.$router.push('/post/create')
+=======
       handlewrite(){
         this.$router.push({
           path:'/post/create'
@@ -207,6 +217,7 @@ export default {
         this.$router.push({
           path:'/user/personal'
         })
+>>>>>>> 6f088785810c87a5e56d58480ed26ddbb214b846
       }
     
   }

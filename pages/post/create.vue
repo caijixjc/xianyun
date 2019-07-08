@@ -22,7 +22,7 @@
                 <div class="button">
                     <span><el-button type="primary" class="issue" @click="handleGet"  >发布</el-button></span>
                     <span>或者</span>
-                    <span> <a href="#" class="draft" @click='handleDraft'>保存到草稿</a></span>
+                    <span> <a href="javascript:;" class="draft" @click='handleDraft'>保存到草稿</a></span>
                 </div>
             </div>
         </el-row>
@@ -114,6 +114,7 @@ data(){
         city:''  //城市id | 城市名称
     },
     draftBox:[],
+    // newdraftBox:[],
     time:'',
     length:''
   }
@@ -152,7 +153,7 @@ methods: {
                         },
             
        }).then(res=>{
-           console.log(res.data);
+        //    console.log(res.data);
            if(res.data.status==0){
             //    this.$router.push('/post/create')
                 this.message = ''
@@ -174,17 +175,19 @@ methods: {
         
         // console.log(this.draftBox);
         
-        this.draftBox = JSON.parse(localStorage.getItem('draft')||'[]')  //从数据库拿数据
+        this.draftBox = JSON.parse(localStorage.getItem('draft')||'[]')  //从本地拿数据
 
         this.time = new Date()
         // console.log(this.time);
         this.time= moment(this.time).format("YYYY-MM-DD");
-
+        
         this.message.time=this.time
-        this.draftBox.push(this.message)
+        this.draftBox.unshift(this.message)
         localStorage.setItem('draft',JSON.stringify(this.draftBox))  //将this.draftBox存入数据库里
         //获取草稿箱长度 渲染条数
         this.length = this.draftBox.length
+
+        
 
 
         
@@ -192,6 +195,8 @@ methods: {
     },
     handleYulan(index){
         // console.log(index);
+        // this.newdraftBox = JSON.parse(JSON.stringify(this.draftBox))
+        let newDraftBox = JSON.parse(JSON.stringify(this.draftBox))
         this.message.title = this.draftBox[index].title
         this.$refs.vueEditor.editor.root.innerHTML = this.draftBox[index].content
         this.message.city = this.draftBox[index].city
