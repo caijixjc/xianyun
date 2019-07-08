@@ -1,4 +1,5 @@
 <template>
+<div class="contoain">
   <div class="box">
     <el-breadcrumb separator="/" class="bread">
       <el-breadcrumb-item :to="{ path: '/post/index' }">旅游攻略</el-breadcrumb-item>
@@ -7,18 +8,18 @@
       </el-breadcrumb-item>
     </el-breadcrumb>
     <el-row class="title">
-      <h1>塞班贵？一定是你的打开方式不对！6000块玩转塞班</h1>
+      <h1 v-for="(item,index) in contents" :key="index">{{item.title}}</h1>
       <hr />
     </el-row>
     <el-row class="post-info">
-      <span>攻略：2019-05-22 10:57</span>
+      <span v-for="(item,index) in contents" :key="index">{{item.city.created_at}}</span>
       <span>阅读：596</span>
     </el-row>
     <div class="box1" v-for="(item,index) in contents" :key="index" v-html="item.content"></div>
     <el-row type="flex" class="tubiao el-row is-justify-center el-row--flex">
       <div class="ctrl-item">
         <i class="iconfont iconpinglun"></i>
-        <p>评论(100)</p>
+        <p>评论({{length}})</p>
       </div>
       <div class="ctrl-item">
         <i class="iconfont iconstar1"></i>
@@ -28,9 +29,9 @@
         <i class="iconfont iconfenxiang"></i>
         <p>分享</p>
       </div>
-      <div class="ctrl-item">
+      <div class="ctrl-item" @click="handleLike(like)">
         <i class="iconfont iconding"></i>
-        <p>点赞</p>
+        <p >点赞({{ like }})</p>
       </div>
     </el-row>
     <el-row class="comment">
@@ -61,10 +62,12 @@
         </el-dialog>
         <el-button type="primary" @click="handleCommit">提交</el-button>
       </el-row>
+
+      
       <div class="cmt-list" >
         
 
-        <div class="cmt-item"  v-for="(item,index) in account" :key="index">
+        <div class="cmt-item"  v-for="(item,index) in dataList" :key="index">
           <div class="cmt-info">
             <img
               :src="`${`http://157.122.54.189:9095`}${item.account.defaultAvatar}`"
@@ -81,7 +84,7 @@
             </div>
             <div>
               <img
-                src="http://157.122.54.189:9095/uploads/a6dacd2aeeb144a6a055faef6f6dced9.jpg"
+                :src="`${item.pics}`"
                 alt
               />
             </div>
@@ -91,13 +94,18 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="1"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :current-page="pageIndex"
+        :page-sizes="[5, 10, 15, 20]"
+        :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="length"
       ></el-pagination>
     </el-row>
+  </div>
+
+  <div class="right">
+      <a href="/post/detail?id=269"></a>
+  </div>
   </div>
 </template>
 
@@ -113,12 +121,18 @@ export default {
       isMultiple: true,
       imgLimit: 6,
 
+      like:1,  //当前点赞书
+      pageIndex: 1, // 当前页数
+      pageSize: 5,  // 显示条数
+      length:0,
+      dataList:[],
+
       contents: [],
 
       comment: [
         {
           content: "",
-          pics: [],
+          pics: "",
           post: "",
           follow: ""
         }
@@ -129,59 +143,86 @@ export default {
   },
 
   methods: {
-    //分页
-    handleCurrentChange() {},
-    handleSizeChange() {},
 
-    handleRemove(file, fileList) {
-      //移除图片
-      console.log(file, fileList);
-    },
+  
+handleLike(){
+  this.id = this.$route.query.id;
+this.$axios({
+  url:"/posts/like?id="+this.id,
+  method:"GET",
+headers:{
+        Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+  },
+}).then(res=>{
+if(status==0){
+  this.like+=1
+}else{
+  this.like=this.like
+}
+})
 
-    handlePictureCardPreview(file) {
-      //预览图片时调用
-      console.log(file);
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
-    onUploadChange(file, fileList) {
-      this.comment.pics.append("images", file.raw);
-    },
-    beforeAvatarUpload(file) {
-      //文件上传之前调用做一些拦截限制
-      console.log(file);
-      const isJPG = true;
-      // const isJPG = file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < 2;
 
-      // if (!isJPG) {
-      //   this.$message.error('上传头像图片只能是 JPG 格式!');
-      // }
-      if (!isLt2M) {
-        this.$message.error("上传图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
-    handleAvatarSuccess(res, file) {
-      //图片上传成功
-      console.log(res);
-      console.log(file);
-      this.imgUrl = URL.createObjectURL(file.raw);
-    },
-    handleExceed(files, fileList) {
-      //图片上传超过数量限制
-      this.$message.error("上传图片不能超过6张!");
-      console.log(file, fileList);
-    },
-    imgUploadError(err, file, fileList) {
-      //图片上传失败调用
-      console.log(err);
-      this.$message.error("上传图片失败!");
-    },
+},
+
+
+onUploadChange(){},
+
+    handleRemove(file, fileList) {//移除图片
+        console.log(file, fileList);
+      },
+      handlePictureCardPreview(file) {//预览图片时调用
+        console.log(file);
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+ 
+      beforeAvatarUpload(file) {//文件上传之前调用做一些拦截限制
+        console.log(file);
+        const isJPG = true;
+        // const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+ 
+        // if (!isJPG) {
+        //   this.$message.error('上传头像图片只能是 JPG 格式!');
+        // }
+        if (!isLt2M) {
+          this.$message.error('上传图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
+      handleAvatarSuccess(res, file) {//图片上传成功
+        console.log(res);
+        console.log(file);
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      handleExceed(files, fileList) {//图片上传超过数量限制
+        this.$message.error('上传图片不能超过6张!');
+        console.log(file, fileList);
+      },
+      imgUploadError(err, file, fileList){//图片上传失败调用
+        console.log(err)
+        this.$message.error('上传图片失败!');
+      },
+
     //提交数据
     handleCommit() {
       this.comment;
-    }
+    },
+     setDataList(){
+            const start = (this.pageIndex - 1) * this.pageSize; 
+            const end = start + this.pageSize; 
+            this.dataList = this.account.slice(start, end);
+        },
+      handleSizeChange(value){
+        // console.log(value)
+            this.pageSize = value;
+            this.pageIndex = 1;
+            this.setDataList();
+        },   
+        handleCurrentChange(value){
+            this.pageIndex = value;
+            this.setDataList();
+        },
   },
   mounted() {
     this.id = this.$route.query.id;
@@ -199,19 +240,41 @@ export default {
     }).then(res => {
       const { data } = res.data;
       this.account=data
+      this.length =this.account.length
       console.log(this.account)
-    });
+      this.setDataList()
+    })
+    
+
+    
   }
 };
 </script>
 
 <style scoped lang="less">
+.contoain{
+  width: 1000px;
+  margin:  0 auto;
+  position: relative;
+  .right{
+    width:250px ;
+    border: 1px solid #999;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
 .box {
   width: 700px;
-  margin: 0 auto;
+  // margin: 0 auto;
   margin-top: 20px;
 }
 .box1 /deep/ span img {
+  width: 100%;
+  
+}
+.box1 /deep/ a img {
   width: 100%;
 }
 .title > h1 {
