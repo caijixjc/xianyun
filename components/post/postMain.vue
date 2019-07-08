@@ -35,22 +35,25 @@
                         <div class="post-wrapper" >
                             <div class="search-wrapper" >
                                 <div class="search-bar el-row is-justify-space-between is-align-middle el-row--flex"
-                                    ><input type="text" placeholder="请输入想去的地方，比如：'广州'" value="北京"
+                                    ><input type="text" placeholder="请输入想去的地方，比如：'广州'" :value="inputval"
                                         > <i class="el-icon-search" ></i></div>
                                 <div class="search-recommend" >
                                     推荐：
-                                    <span >
-                                        广州
-                                    </span><span >
-                                        上海
-                                    </span><span >
-                                        北京
-                                    </span></div>
+                                    <i @click='handleaddress(index)' v-for='(item,index) in address' :key='index'>
+                                      <span>{{item}}</span>
+                                      </i>
+                                    
+                                    </div>
                             </div>
                             <div class="post-title el-row is-justify-space-between is-align-middle el-row--flex"
                                 >
+<<<<<<< HEAD
                                 <h4 >推荐攻略</h4> <button type="button" class="el-button el-button--primary" @click="handleCreate"
                                     >
+=======
+                                <h3 >推荐攻略</h3> <button type="button" class="el-button el-button--primary"
+                                    @click='handlewrite'>
+>>>>>>> 6f088785810c87a5e56d58480ed26ddbb214b846
                                     <!----><i class="el-icon-edit"></i><span>
                                         写游记
                                     </span></button>
@@ -58,7 +61,7 @@
                             <!-- 推荐攻略 -->
                             <div class="post-list" >
                                 <div v-for='(item,index) in datalist' >
-                                    <div @click='handlepagechange(item.id)'>
+                                  <div @click='handlepagechange(item.id)'class="mouse">
                                     <div class='post-list-main'>
                                         <h4>{{item.title}}</h4>
                                     <p>{{item.summary}}</p>
@@ -68,10 +71,19 @@
                                           </a>
 
                                     </div>
+                                  </div>
+                                   
                                     </div>
-                                    <div class='post-list-buttom'>
-                                        <span></span>
-                                    </div>
+                                     <div class='post-list-buttom'>
+                                        <span><i class="el-icon-location-outline"></i><span>{{item.city.name}}</span><i>by</i></span>
+                                        <span @click='handleperson'>
+                                          <img src="@/static/images/avatar.jpg">
+                                          <span class="name">{{item.account.nickname}}</span>
+                                        
+                                        </span>
+                                        <span><i class="el-icon-view"></i><span>{{item.watch}}</span></span>
+                                        <span class="like">{{item.like}}赞</span>
+                                        
                                     </div>
                                     
                                     
@@ -108,7 +120,8 @@ export default {
         pageIndex: 1,
         total:0,
         pageSize:3,
-
+        inputval:"北京",
+        address:['广州','上海','北京'],
      
      data:{
          type:'',
@@ -131,7 +144,7 @@ export default {
       method:'GET',
 
     }).then(res=>{
-    //   console.log(res.data);
+      // console.log(res.data);
     //   console.log(res.data.data[0]);
      this.data =res.data.data;
      
@@ -141,6 +154,7 @@ export default {
       
      
     })
+    
     this.$axios({
 
          url:'/posts',
@@ -186,9 +200,24 @@ export default {
               path:'/post/detail?id='+id,
           })
       },
+<<<<<<< HEAD
       handleCreate(){
         // console.log(this.$router);
         this.$router.push('/post/create')
+=======
+      handlewrite(){
+        this.$router.push({
+          path:'/post/create'
+        })
+      },
+      handleaddress(index){
+        this.inputval = this.address[index]
+      },
+      handleperson(){
+        this.$router.push({
+          path:'/user/personal'
+        })
+>>>>>>> 6f088785810c87a5e56d58480ed26ddbb214b846
       }
     
   }
@@ -197,6 +226,43 @@ export default {
 </script>
 
 <style scoped >
+.post-list-buttom .name{
+  color: orange
+}
+.post-title h3{
+  color: orange
+}
+.post-list .mouse{
+ cursor: pointer;
+ 
+}
+.post-list-main h4{
+padding-bottom: 20px;
+}
+.post-list-main h4:hover{
+  
+  color: orange;
+}
+.post-list-buttom{
+  position: relative;
+}
+.post-list-buttom .like{
+position: absolute;
+right:0px;
+font-size: 16px;
+color: orange;
+}
+.post-list-buttom img{
+      width: 16px;
+    height: 16px;
+    border-radius: 100px
+}
+.menus .menus-content span{
+    font-size: 15px;
+    padding-left:5px;
+    
+    
+}
 ul{
     list-style: none ;
 }
@@ -225,9 +291,9 @@ ul{
       position: relative;
     }
     .menus-wrapper .menus-content{
-      width: 260px;
+      width: 300px;
       /* height: 160px; */
-      /* border: 1px solid #ddd; */
+      border-top: 1px solid #ddd;
       border-left: none;
       border-bottom: none;
       box-shadow: 0 0 1px #f5f5f5;
@@ -235,7 +301,7 @@ ul{
       background-color: white;
       position: absolute;
       left:260px;
-      top:0px;
+      top:-1px;
       display: flex;
       flex-direction: column;
       justify-content:space-around
@@ -319,42 +385,6 @@ ul{
     /* display: -webkit-box;
     -webkit-line-clamp: 3; */
     }
-
-    /* .menus-wrapper .sub-menus ul li {
-      font-size: 14px;
-       line-height: 1.5; 
-      height: 40px;
-    } */
-
-    /* .menus-wrapper .sub-menus ul li * {
-      vertical-align: middle
-    } */
-
-    /* .menus-wrapper .sub-menus ul li i {
-      color: orange;
-      font-size: 24px;
-      font-style: italic
-    }
-
-    .menus-wrapper .sub-menus ul li strong {
-      margin: 0 10px;
-      color: orange;
-      font-weight: 400
-    }
-
-    .menus-wrapper .sub-menus ul li strong:hover {
-      text-decoration: underline
-    }
-
-    .menus-wrapper .sub-menus ul li span {
-      color: #999
-    }
-
-    .menus-wrapper .sub-menus ul li span:hover {
-      text-decoration: underline
-    } */
-
-
     .aside-recommend {
       margin-top: 20px
     }

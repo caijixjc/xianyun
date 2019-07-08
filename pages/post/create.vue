@@ -196,6 +196,7 @@ methods: {
     handleYulan(index){
         // console.log(index);
         // this.newdraftBox = JSON.parse(JSON.stringify(this.draftBox))
+        let newDraftBox = JSON.parse(JSON.stringify(this.draftBox))
         this.message.title = this.draftBox[index].title
         this.$refs.vueEditor.editor.root.innerHTML = this.draftBox[index].content
         this.message.city = this.draftBox[index].city
