@@ -49,7 +49,7 @@
                             </div>
                             <div class="post-title el-row is-justify-space-between is-align-middle el-row--flex"
                                 >
-                                <h4 >推荐攻略</h4> <button type="button" class="el-button el-button--primary"
+                                <h4 >推荐攻略</h4> <button type="button" class="el-button el-button--primary" @click="handleCreate"
                                     >
                                     <!----><i class="el-icon-edit"></i><span>
                                         写游记
@@ -185,6 +185,10 @@ export default {
           this.$router.push({
               path:'/post/detail?id='+id,
           })
+      },
+      handleCreate(){
+        // console.log(this.$router);
+        this.$router.push('/post/create')
       }
     
   }
