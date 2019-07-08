@@ -79,10 +79,9 @@
           <span>主要设施</span>
         </el-col>
         <el-col :span="20" class="messageRight service">
-          <span>外币兑换服务</span>
-          <span>洗衣服务</span>
-          <span>吹风机</span>
-          <span>电梯</span>
+          
+          <span v-for="(item, index) in data.hotelassets" :key="index">{{item.name}}</span>
+        
         </el-col>
       </el-row>
       <el-row class="messageItem">
@@ -103,16 +102,23 @@
 
 <script>
 export default {
+  props:[
+    "data"
+  ],
   data() {
     return {
       map: "",
       activeName: "second"
     };
   },
+  
 
   methods: {
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+    a(){
+      console.log(data);
     }
   },
 

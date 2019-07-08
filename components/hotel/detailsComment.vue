@@ -27,12 +27,12 @@
       </el-row>
       <div class="cot_wrapper">
         <h4>评论</h4>
-        <textarea
-          autocomplete="off"
-          placeholder="说点什么吧..."
-          class="el-textarea__inner"
-          style="resize: none; min-height: 33px;"
-        ></textarea>
+       <el-input
+          type="textarea"
+          autosize
+          placeholder="请输入内容"
+          v-model="textarea1">
+        </el-input>
         <!-- 上传图片 -->
         <el-row class="uploadPictures" type="flex" justify="space-between">
           <div>
@@ -41,6 +41,7 @@
               list-type="picture-card"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
+              :on-success="handleAvatarSuccess"
             >
               <i class="el-icon-plus"></i>
             </el-upload>
@@ -49,7 +50,7 @@
             </el-dialog>
           </div>
           <div>
-            <el-button type="primary">提交</el-button>
+            <el-button type="primary" @click="handleSubmission">提交</el-button>
           </div>
         </el-row>
         <!-- 回复评论 -->
@@ -113,13 +114,24 @@ export default {
       currentPage1: 5,
       currentPage2: 5,
       currentPage3: 5,
-      currentPage4: 4
+      currentPage4: 4,
+
+      textarea1: '',//输入框内容
+
     };
   },
   methods: {
+    //图片上传成功时
+    handleAvatarSuccess(response, file, fileList){
+            console.log(response);
+            console.log(file);
+            console.log(fileList);
+    },
+    //删除图片时
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
+      // 图片钩子
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
@@ -129,8 +141,42 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+    },
+    // 评论提交
+    handleSubmission(){
+      const {id} = this.$route.query
+      const token = this.$store.state.user.userInfo.token;
+      console.log(this.textarea1);
+      this.$axios({
+        url:"/comments",
+        method:"POST",
+        headers:{
+          Authorization:`Bearer ${token} `
+        },
+        params:{
+          content:this.textarea1,
+          hotel:id,
+
+        }
+      }).then(res =>{
+        // console.log(res);
+      })
+
     }
-  }
+  },
+  mounted() {
+    const {id} = this.$route.query;
+    console.log(id);
+    this.$axios({
+      url:"/hotels/comments",
+      method:"GET",
+      params:{
+        hotel:id
+      }
+    }).then(res =>{
+      console.log(res);
+    })
+  },
 };
 </script>
 

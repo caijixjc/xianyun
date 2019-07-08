@@ -2,16 +2,22 @@
   <div class="cantainter">
     <div class="main">
       <!-- 酒店详情页里的detailsHotel组件 -->
+      
       <div>
-        <DetailsHotel />
+        <DetailsHotel 
+        :data="dataList" />
       </div>
       <!-- 酒店详情页里的detailsMap组件 -->
       <div>
-        <DetailsMap />
+        <DetailsMap
+        :data="dataList" 
+        />
       </div>
       <!-- 酒店详情页里的detailsComment组件 -->
       <div>
-        <DetailsComment />
+        <DetailsComment 
+        :data="dataList"
+        />
       </div>
     </div>
   </div>
@@ -29,6 +35,27 @@ export default {
     DetailsHotel,
     DetailsMap,
     DetailsComment
+  },
+  data() {
+    return {
+      dataList:[],//总数据
+      hotelassets:[],//酒店服务
+    }
+  },
+
+  mounted() {
+    const { id } = this.$route.query;
+    this.$axios({
+      url: "/hotels",
+      method: "GET",
+      params:{
+          id
+      }
+    }).then(res => {
+      this.dataList = res.data.data[0]
+      console.log(this.dataList);
+    
+    });
   }
 };
 </script>

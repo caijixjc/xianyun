@@ -104,7 +104,7 @@ export default {
     },
     mounted(){
        setTimeout(() => {
-           console.log(5555,this.data);
+        //    console.log(5555,this.data);
        }, 1000);
     },
     methods: {
@@ -146,6 +146,7 @@ export default {
         },
         handlejumper(index){
             console.log(index);
+            console.log(this.data.data);
             this.$router.push({
                 path: "/hotel/details",
                 query: {
