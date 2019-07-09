@@ -126,6 +126,7 @@ export default {
             console.log(response);
             console.log(file);
             console.log(fileList);
+            fileList.url.push
     },
     //删除图片时
     handleRemove(file, fileList) {
